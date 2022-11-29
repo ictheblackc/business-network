@@ -1,10 +1,32 @@
 # Back-end
 
 backend/.idea
+backend/db.sqlite3
+backend/*.log
+backend/*.pot
+backend/*.pyc
+backend/**/__pycache__
+backend/media
+backend/.env 
+backend/.venv
+backend/env
+backend/venv
+backend/ENV
+backend/.vscode
 
-
-######################################
+####################################
 
 # Front-end
 
+frontend/node_modules
+frontend/target
+frontend/dist
+frontend/logs
+frontend/public
+frontend/.cache
+frontend/.vscode
+frontend/.DS_Store
 frontend/.idea
+frontend/.next
+frontend/yarn-error.log
+frontend/npm-debug.log
