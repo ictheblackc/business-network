@@ -1,6 +1,6 @@
 # Business Network
 
-### Run back-end:
+### Back-end:
 
 Create Venv:
 ```shell
@@ -15,7 +15,7 @@ python manage.py runserver
 ```
 
 
-### Run front-end:
+### Front-end:
 
 Run server:
 ```shell
