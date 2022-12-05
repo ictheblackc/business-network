@@ -1,27 +1,22 @@
-import {Button} from "@mui/material";
-import {useState} from "react";
 import {NextPage} from "next";
 
+// ----------------------------------------------------------------------
 
 interface IndexProps {
-    // state: number,
 }
 
+// ----------------------------------------------------------------------
+
 const IndexPage: NextPage<IndexProps> = ({}) => {
-    const [value, setValue] = useState(0);
-
-
     return (
         <>
-            <Button
-                variant="contained"
-                onClick={() => setValue(prevState => ++prevState)}
-            >
-                {value}
-            </Button>
+            <h1>Main Page</h1>
         </>
     )
 }
+
+export default IndexPage;
+
 
 // export const getServerSideProps = wrapper.getServerSideProps(
 //     (store) =>
@@ -37,5 +32,3 @@ const IndexPage: NextPage<IndexProps> = ({}) => {
 //             };
 //         }
 // );
-
-export default IndexPage;

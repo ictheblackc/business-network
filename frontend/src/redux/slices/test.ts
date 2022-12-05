@@ -1,13 +1,15 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {fetchTodo} from "../thunk/test";
+import {ErrorRequest, StatusRequest} from "./types";
 
+// ----------------------------------------------------------------------
+// Example Slice
 
-// State
 type TestState = {
     counter: number;
     entities: [];
-    status: 'idle' | 'pending' | 'succeeded' | 'failed';
-    error: null | string | undefined;
+    status: StatusRequest;
+    error: ErrorRequest;
 };
 
 const initialState: TestState = {
@@ -17,7 +19,8 @@ const initialState: TestState = {
     error: null,
 };
 
-// Slice
+// ----------------------------------------------------------------------
+
 export const testSlice = createSlice({
     name: "test",
     initialState,
@@ -27,10 +30,10 @@ export const testSlice = createSlice({
         },
     },
     extraReducers: (builder) => {
-        builder.addCase(fetchTodo.pending, (state: TestState, action) => {
+        builder.addCase(fetchTodo.pending, (state: TestState) => {
             state.status = 'pending'
         })
-        builder.addCase(fetchTodo.fulfilled, (state: TestState, action) => {
+        builder.addCase(fetchTodo.fulfilled, (state: TestState, action: PayloadAction<{ entities: [] }>) => {
             state.status = 'succeeded'
             state.entities = action.payload.entities
         })
@@ -41,13 +44,6 @@ export const testSlice = createSlice({
     },
 });
 
-// Types
-export type Test = {
-    article: string;
-    description?: string;
-}
-
-// Export
 export const {
     increaseCounter,
 } = testSlice.actions;

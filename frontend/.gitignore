@@ -34,7 +34,6 @@ logs
 *.tsbuildinfo
 next-env.d.ts
 
-
 target
 dist
 .cache
