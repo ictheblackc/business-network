@@ -1,6 +1,6 @@
 import {createAsyncThunk} from "@reduxjs/toolkit";
-import {setSession} from "../../user/jwt";
-import axiosClient from "../../utils/axios";
+import {axiosNext} from "../../utils/axios";
+import {logoutAction} from "../slices/user";
 
 // ----------------------------------------------------------------------
 
@@ -17,23 +17,42 @@ export type signupRequestArguments = {
 // ----------------------------------------------------------------------
 
 export const loginRequest = createAsyncThunk('user/login',
-    async (data: loginRequestArguments) => {
-        const response = await axiosClient.post('/api/user/login', data);
-        const {access, user} = response.data;
+    async (data: loginRequestArguments, {rejectWithValue}) => {
+        try {
+            const response = await axiosNext.post('api/user/login', data);
+            const {user} = response.data;
 
-        setSession(access);
-
-        return {access, user};
+            return {user};
+        } catch (error) {
+            return rejectWithValue(error);
+        }
     }
 );
 
 export const signupRequest = createAsyncThunk('user/signup',
-    async (data: signupRequestArguments) => {
-        const response = await axiosClient.post('/api/user/signup', data);
-        const {access, user} = response.data;
+    async (data: signupRequestArguments, {rejectWithValue}) => {
+        try {
+            const response = await axiosNext.post('api/user/signup', data);
+            const {user} = response.data;
 
-        localStorage.setItem('accessToken', access);
+            return {user};
+        } catch (error) {
+            return rejectWithValue(error);
+        }
 
-        return {access, user};
     }
 );
+
+export const logoutRequest = createAsyncThunk('user/logout',
+    async (data, {rejectWithValue, dispatch}) => {
+        try {
+            await axiosNext.post('api/user/logout');
+
+            dispatch(logoutAction());
+        } catch (error) {
+            return rejectWithValue(error);
+        }
+    }
+);
+
+

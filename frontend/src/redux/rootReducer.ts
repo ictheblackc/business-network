@@ -1,4 +1,4 @@
-import { combineReducers } from '@reduxjs/toolkit'
+import {combineReducers} from '@reduxjs/toolkit'
 import test from './slices/test'
 import user from "./slices/user";
 

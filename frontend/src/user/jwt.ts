@@ -1,48 +1,61 @@
-import jwtDecode from 'jwt-decode';
-import axiosClient from "../utils/axios";
-import {PATH_USER} from "../routes/paths";
+import {axiosBackend, axiosBackendWithoutUser} from "../utils/axios";
+import {setUser} from "../redux/slices/user";
+import {AppDispatch} from "../redux/store";
 
 // ----------------------------------------------------------------------
 
-const isValidToken = (accessToken: string) => {
-    if (!accessToken) return false;
+export const verifyAccessTokenRequest =
+    async ({accessToken, dispatch}: { accessToken: string, dispatch: AppDispatch }) => {
 
-    // @ts-ignore
-    const { exp } = jwtDecode(accessToken);
+        // We have to use axiosBackendWithoutUser
+        // because axiosBackend has an event handler
+        // that will start 'api/user/refresh'
 
-    const currentTime = Date.now() / 1000;
+        axiosBackendWithoutUser.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
 
-    return exp > currentTime;
-};
+        const response = await axiosBackendWithoutUser.get('api/user/token/verify');
+        const {user} = response.data;
 
-const handleTokenExpired = (exp: number) => {
-    const currentTime = Date.now();
+        axiosBackend.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
+        delete axiosBackendWithoutUser.defaults.headers.common.Authorization;
 
-    const timeLeft = exp * 1000 - currentTime;
-
-    const expiredTimer = setTimeout(() => {
-
-        localStorage.removeItem('accessToken');
-
-        window.location.href = PATH_USER.login;
-    }, timeLeft);
-
-    clearTimeout(expiredTimer);
-};
-
-const setSession = (accessToken: string | null) => {
-    if (accessToken) {
-        localStorage.setItem('accessToken', accessToken);
-        axiosClient.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
-
-        // @ts-ignore
-        const {exp} = jwtDecode(accessToken);
-
-        handleTokenExpired(exp);
-    } else {
-        localStorage.removeItem('accessToken');
-        delete axiosClient.defaults.headers.common.Authorization;
+        dispatch(setUser({user}));
     }
-};
 
-export { isValidToken, setSession };
+// ----------------------------------------------------------------------
+
+export const refreshAccessTokenRequest =
+    async ({refreshToken, cookies}: { refreshToken: string | undefined, cookies: any }) => {
+
+        const data = {refresh: refreshToken};
+
+        const response = await axiosBackend.post('api/user/token/refresh', data);
+        const {access, refresh} = response.data;
+
+        setAccessToken({access, cookies});
+        setRefreshToken({refresh, cookies});
+
+        return access;
+    }
+
+// ----------------------------------------------------------------------
+
+export const setAccessToken = ({access, cookies}: { access: string, cookies: any }) => {
+    if (access && cookies) {
+        // @ts-ignore
+        const maxAgeAccess = process.env.ACCESS_TOKEN_LIFETIME_IN_MINUTES * 1000 * 60; // Time in minutes
+
+        cookies.set("accessToken", access, {maxAge: maxAgeAccess});
+    }
+}
+
+// ----------------------------------------------------------------------
+
+export const setRefreshToken = ({refresh, cookies}: { refresh: string, cookies: any }) => {
+    if (refresh && cookies) {
+        // @ts-ignore
+        const maxAgeRefresh = process.env.REFRESH_TOKEN_LIFETIME_IN_DAYS * 1000 * 60 * 60 * 24; // Time in days
+
+        cookies.set("refreshToken", refresh, {maxAge: maxAgeRefresh});
+    }
+}

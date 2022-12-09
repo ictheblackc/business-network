@@ -2,12 +2,12 @@ import {DependencyList, EffectCallback, useEffect, useRef} from "react";
 
 // ----------------------------------------------------------------------
 
-const useEffectClient = (effect: EffectCallback, deps?: DependencyList) => {
-    const isRenderOnServer = useRef(true);
+const useEffectUpdate = (effect: EffectCallback, deps?: DependencyList) => {
+    const counter = useRef(0);
 
     useEffect(() => {
-        if (isRenderOnServer.current) {
-            isRenderOnServer.current = false;
+        if (counter.current < 2) {
+            counter.current++;
             return;
         }
         effect();
@@ -15,4 +15,4 @@ const useEffectClient = (effect: EffectCallback, deps?: DependencyList) => {
     }, [...deps]);
 };
 
-export default useEffectClient;
+export default useEffectUpdate;

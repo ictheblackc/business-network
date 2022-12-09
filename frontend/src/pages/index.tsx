@@ -1,13 +1,10 @@
 import {NextPage} from "next";
+import Layout from "../layouts/Layout";
 
 // ----------------------------------------------------------------------
 
-interface IndexProps {
-}
+const HomePage: NextPage = ({}) => {
 
-// ----------------------------------------------------------------------
-
-const IndexPage: NextPage<IndexProps> = ({}) => {
     return (
         <>
             <h1>Main Page</h1>
@@ -15,20 +12,20 @@ const IndexPage: NextPage<IndexProps> = ({}) => {
     )
 }
 
-export default IndexPage;
+// ----------------------------------------------------------------------
+
+// @ts-ignore
+HomePage.getLayout = function getLayout(page) {
+    return <Layout>{page}</Layout>;
+};
+
+export default HomePage;
 
 
-// export const getServerSideProps = wrapper.getServerSideProps(
-//     (store) =>
-//         async ({ params }) => {
-//
-//             await store.dispatch(increaseCounter(1));
-//
-//
-//             return {
-//                 props: {
-//                     state: 70,
-//                 },
-//             };
-//         }
+// export const getServerSideProps = wrapper.getServerSideProps((store) => async ({}) => {
+//         console.log("getServerSideProps")
+//         return {props: {}}
+//     }
 // );
+
+

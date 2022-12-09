@@ -4,6 +4,8 @@ import {TextField} from 'mui-rff';
 import {Button, Stack} from "@mui/material";
 import useAuth from "./useAuth";
 import Typography from "@mui/material/Typography";
+import {useSnackbar} from "notistack";
+import useEffectUpdate from "../hooks/useEffectUpdate";
 
 // ----------------------------------------------------------------------
 
@@ -19,13 +21,13 @@ interface FormData {
     password: string;
 }
 
-interface LoginFormProps {
-}
-
 // ----------------------------------------------------------------------
 
-const LoginForm: FC<LoginFormProps> = ({}) => {
-    const {login} = useAuth();
+const LoginForm: FC = ({}) => {
+
+    const {enqueueSnackbar} = useSnackbar();
+
+    const {login, request: {login: {status, error}}} = useAuth();
 
     const onSubmit = async (values: FormData) => login(values);
 
@@ -36,6 +38,12 @@ const LoginForm: FC<LoginFormProps> = ({}) => {
 
         return;
     };
+
+    useEffectUpdate(() => {
+        if (status === 'failed' && error) {
+            enqueueSnackbar(error, {variant: "error"});
+        }
+    }, [error]);
 
     return (
         <Form
@@ -52,9 +60,11 @@ const LoginForm: FC<LoginFormProps> = ({}) => {
                         <Button type="submit" variant="contained" size="large" sx={{textTransform: 'none'}}>
                             Log in
                         </Button>
+
                         <Typography>
                             User: admin@mail.com
                         </Typography>
+
                         <Typography>
                             password: qwerty!12345
                         </Typography>

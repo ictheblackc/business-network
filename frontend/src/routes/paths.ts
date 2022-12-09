@@ -5,7 +5,6 @@ const path = (root: string, sublink: string) => `${root}${sublink}`;
 const PATH_MAIN = '/';
 const ROOTS_USER = '/user';
 
-
 // ----------------------------------------------------------------------
 
 export const PATH_USER = {

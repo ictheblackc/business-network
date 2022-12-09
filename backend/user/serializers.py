@@ -50,3 +50,4 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         data.update({'user': user.data})
 
         return data
+
