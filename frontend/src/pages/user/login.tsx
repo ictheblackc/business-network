@@ -14,7 +14,7 @@ const LoginPage: NextPage = ({}) => {
             alignItems="center"
             sx={{height: '100vh'}}
         >
-            <LoginForm />
+            <LoginForm/>
 
             <Link href={PATH_USER.signup}>Sign up</Link>
         </Stack>

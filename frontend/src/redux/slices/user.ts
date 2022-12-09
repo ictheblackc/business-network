@@ -14,8 +14,8 @@ type SignupRequestValidation = {
 }
 
 type UserState = {
-    isAuth: boolean,
-    user: null | User,
+    isAuth: boolean;
+    user: null | User;
     request: {
         login: Request;
         signup: SignupRequestValidation & Request;

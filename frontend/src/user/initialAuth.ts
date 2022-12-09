@@ -16,6 +16,7 @@ export const authentication = async ({cookies, dispatch}: { cookies: any, dispat
     try {
         await verifyAccessTokenRequest({accessToken, dispatch});
 
+        return accessToken;
     } catch (error) {
         // @ts-ignore
         if (error?.response?.status === 401) {
@@ -23,6 +24,8 @@ export const authentication = async ({cookies, dispatch}: { cookies: any, dispat
                 const accessToken = await refreshAccessTokenRequest({refreshToken, cookies});
 
                 await verifyAccessTokenRequest({accessToken, dispatch});
+
+                return accessToken;
             } catch (error) {
                 // If not auth, delete cookies and logout
                 cookies.set("accessToken", '', {maxAge: -1});

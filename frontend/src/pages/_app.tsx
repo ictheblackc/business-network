@@ -12,6 +12,7 @@ import AuthGuard from "../user/AuthGuard";
 import lightThemeOptions from "theme";
 import {createTheme, CssBaseline, ThemeProvider} from '@mui/material'
 import {SnackbarProvider} from "notistack";
+import {axiosBackend} from "../utils/axios";
 
 // ----------------------------------------------------------------------
 
@@ -23,6 +24,12 @@ const MyApp = ({Component, ...rest}: AppProps) => {
     const {store, props} = wrapper.useWrappedStore(rest);
     // @ts-ignore
     const getLayout = Component.getLayout ?? ((page: NextPage) => page);
+
+    const {accessToken} = props.pageProps;
+
+    if (accessToken) {
+        axiosBackend.defaults.headers.Authorization = `Bearer ${accessToken}`;
+    }
 
 
     return (
@@ -49,12 +56,14 @@ MyApp.getInitialProps = wrapper.getInitialAppProps((store) => async ({ctx}) => {
         const cookies = new Cookies(req, res);
         const {dispatch, getState} = store;
 
-        await authentication({cookies, dispatch});
+        const accessToken: string | undefined = await authentication({cookies, dispatch});
 
         await initialAuthGuard({req, res, isAuth: getState().user.isAuth});
+
+        return {pageProps: {accessToken}};
     }
 
-    return {pageProps: {}}
+    return {pageProps: {accessToken: ''}};
 })
 
 export default MyApp;

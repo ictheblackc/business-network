@@ -1,5 +1,5 @@
 import {createAsyncThunk} from "@reduxjs/toolkit";
-import {axiosNext} from "../../utils/axios";
+import {axiosBackend, axiosNext} from "../../utils/axios";
 import {logoutAction} from "../slices/user";
 
 // ----------------------------------------------------------------------
@@ -20,7 +20,9 @@ export const loginRequest = createAsyncThunk('user/login',
     async (data: loginRequestArguments, {rejectWithValue}) => {
         try {
             const response = await axiosNext.post('api/user/login', data);
-            const {user} = response.data;
+            const {user, access} = response.data;
+
+            axiosBackend.defaults.headers.Authorization = `Bearer ${access}`;
 
             return {user};
         } catch (error) {
@@ -33,7 +35,9 @@ export const signupRequest = createAsyncThunk('user/signup',
     async (data: signupRequestArguments, {rejectWithValue}) => {
         try {
             const response = await axiosNext.post('api/user/signup', data);
-            const {user} = response.data;
+            const {user, access} = response.data;
+
+            axiosBackend.defaults.headers.Authorization = `Bearer ${access}`;
 
             return {user};
         } catch (error) {
@@ -47,6 +51,8 @@ export const logoutRequest = createAsyncThunk('user/logout',
     async (data, {rejectWithValue, dispatch}) => {
         try {
             await axiosNext.post('api/user/logout');
+
+            axiosBackend.defaults.headers.Authorization = `Bearer`;
 
             dispatch(logoutAction());
         } catch (error) {

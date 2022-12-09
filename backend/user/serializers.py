@@ -1,7 +1,7 @@
-from rest_framework import serializers
+from django.contrib.auth import get_user_model
 from django.contrib.auth.password_validation import validate_password
 from django.core import exceptions
-from django.contrib.auth import get_user_model
+from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 User = get_user_model()
@@ -50,4 +50,3 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         data.update({'user': user.data})
 
         return data
-

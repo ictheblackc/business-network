@@ -11,13 +11,12 @@ export const verifyAccessTokenRequest =
         // because axiosBackend has an event handler
         // that will start 'api/user/refresh'
 
-        axiosBackendWithoutUser.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
+        axiosBackendWithoutUser.defaults.headers.Authorization = `Bearer ${accessToken}`;
 
         const response = await axiosBackendWithoutUser.get('api/user/token/verify');
         const {user} = response.data;
 
-        axiosBackend.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
-        delete axiosBackendWithoutUser.defaults.headers.common.Authorization;
+        delete axiosBackendWithoutUser.defaults.headers.Authorization;
 
         dispatch(setUser({user}));
     }

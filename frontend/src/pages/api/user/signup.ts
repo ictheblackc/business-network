@@ -24,7 +24,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
             setAccessToken({access, cookies});
             setRefreshToken({refresh, cookies});
 
-            res.status(200).json({user});
+            res.status(200).json({user, access});
         } catch (error) {
             // @ts-ignore
             const {response} = error;
