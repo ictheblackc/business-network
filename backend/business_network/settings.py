@@ -29,7 +29,6 @@ INSTALLED_APPS = [
     'corsheaders',
     'rest_framework',
     'user',
-    'todo',
     'django_extensions',
 ]
 
