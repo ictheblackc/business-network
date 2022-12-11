@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import Register, VerifyUser, MyTokenObtainPairView
+from api_v1.views.views_user import Register, VerifyUser, MyTokenObtainPairView
 from rest_framework_simplejwt.views import TokenRefreshView
 
 

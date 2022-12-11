@@ -16,7 +16,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
     if (data.email && data.password) {
         try {
-            const response = await axiosBackendWithoutUser.post('api/user/signup', data);
+            const response = await axiosBackendWithoutUser.post('api/v1/user/signup', data);
             const {access, refresh, user} = response.data;
 
             const cookies = new Cookies(req, res);

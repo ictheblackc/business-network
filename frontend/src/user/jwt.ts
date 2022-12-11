@@ -9,11 +9,11 @@ export const verifyAccessTokenRequest =
 
         // We have to use axiosBackendWithoutUser
         // because axiosBackend has an event handler
-        // that will start 'api/user/refresh'
+        // that will start 'api/v1/user/refresh'
 
         axiosBackendWithoutUser.defaults.headers.Authorization = `Bearer ${accessToken}`;
 
-        const response = await axiosBackendWithoutUser.get('api/user/token/verify');
+        const response = await axiosBackendWithoutUser.get('api/v1/user/token/verify');
         const {user} = response.data;
 
         delete axiosBackendWithoutUser.defaults.headers.Authorization;
@@ -28,7 +28,7 @@ export const refreshAccessTokenRequest =
 
         const data = {refresh: refreshToken};
 
-        const response = await axiosBackend.post('api/user/token/refresh', data);
+        const response = await axiosBackend.post('api/v1/user/token/refresh', data);
         const {access, refresh} = response.data;
 
         setAccessToken({access, cookies});
